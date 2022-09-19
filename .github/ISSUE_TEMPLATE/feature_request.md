@@ -17,6 +17,7 @@ assignees: ''
 
 ## Description générale
 
+Description de la feature, précisions d'ordre général, diagramme etc.
 ## NomEntité
 
 ### Propriétés
