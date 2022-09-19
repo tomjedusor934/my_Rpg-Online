@@ -1,5 +1,6 @@
 # My files
 *.env
+./src/*.o
 
 # Prerequisites
 *.d

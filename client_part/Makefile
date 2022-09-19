@@ -1,0 +1,32 @@
+##
+## EPITECH PROJECT, 2022
+## test socket C
+## File description:
+## Makefile
+##
+
+SRC = $(wildcard src/*.c)
+
+OBJ = $(SRC:.c=.o)
+
+C_FLAGS = -Wall -Wextra -g -lncurses #-lpthread
+
+CSFML_FLAGS = -lcsfml-system -lcsfml-graphics -lcsfml-window -lcsfml-audio -lcsfml-network -lm
+
+NAME = rpg_client
+
+all: $(NAME)
+
+$(NAME): $(OBJ)
+	gcc $(OBJ) -o $(NAME) $(C_FLAGS) $(CSFML_FLAGS)
+	cp $(NAME) ../
+
+clean:
+	rm -f $(OBJ)
+
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re

@@ -1,3 +1,6 @@
+# My files
+*.env
+
 # Prerequisites
 *.d
 
