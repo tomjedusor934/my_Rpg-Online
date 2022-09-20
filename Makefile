@@ -5,6 +5,8 @@
 ## Makefile
 ##
 
+NAME = prject
+
 all: $(NAME)
 
 $(NAME):

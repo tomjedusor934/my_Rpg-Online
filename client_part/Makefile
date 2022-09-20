@@ -19,13 +19,14 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	gcc $(OBJ) -o $(NAME) $(C_FLAGS) $(CSFML_FLAGS)
-	cp $(NAME) ../
+	mv $(NAME) ../
 
 clean:
 	rm -f $(OBJ)
 
 fclean: clean
 	rm -f $(NAME)
+	rm -f ../$(NAME)
 
 re: fclean all
 
