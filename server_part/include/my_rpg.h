@@ -50,6 +50,16 @@
 
 //define struct
 
+typedef struct user_s {
+    int id;
+    char name[20];
+    int socket;
+    int x;
+    int y;
+    int hp;
+
+} user_t;
+
 typedef struct thread_s {
     pthread_t thread;
     int id;
@@ -66,15 +76,6 @@ typedef struct game_oject_s {
 typedef struct skin_user_s {
 
 }skin_user_t;
-typedef struct user_s {
-    int id;
-    char name[20];
-    int socket;
-    int x;
-    int y;
-    int hp;
-
-} user_t;
 
 //define enum
 enum scene {
