@@ -31,6 +31,7 @@
 
     //include for linux thread
     #include <pthread.h>
+    #include <threads.h>
 
     //include for linux CSFML
     #include <SFML/Graphics.h>
@@ -61,11 +62,10 @@ typedef struct user_s {
 } user_t;
 
 typedef struct thread_s {
-    pthread_t thread;
     int id;
     int socket;
-    struct sockaddr_in client;
-    socklen_t size;
+    // struct sockaddr_in client;
+    // socklen_t size;
     user_t *user;
     struct thread_s *next;
 } thread_t;
@@ -76,6 +76,11 @@ typedef struct game_oject_s {
 typedef struct skin_user_s {
 
 }skin_user_t;
+
+typedef struct general_s {
+    int is_connect;
+    thread_t *thread;
+} general_t;
 
 //define enum
 enum scene {

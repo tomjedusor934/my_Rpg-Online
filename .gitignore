@@ -1,5 +1,7 @@
 # My files
 *.env
+rpg_client
+rpg_server
 
 # Prerequisites
 *.d
