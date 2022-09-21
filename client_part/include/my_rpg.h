@@ -28,6 +28,7 @@
     #include <netdb.h> /* gethostbyname */
     #include <sys/wait.h>
     #include <sys/stat.h>
+    #include <sys/select.h>
 
     //include for linux thread
     #include <pthread.h>

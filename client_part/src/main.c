@@ -25,6 +25,29 @@ int main(void)
     scanf("%s %d", user.name, &user.id);
     send(socket_client, &user, sizeof(user), 0);
 
+    fd_set readfd;
+    struct timeval timeout;
+
+    FD_ZERO(&readfd);
+    FD_SET(socket_client, &readfd);
+
+    timeout.tv_sec = 3;
+    timeout.tv_usec = 0;
+    // while (1) {
+    //     FD_ZERO(&readfs);
+    //     FD_SET(socket_client, &readfs);
+    //     timeout.tv_sec = 0;
+    //     timeout.tv_usec = 0;
+    //     if (select(socket_client + 1, &readfs, NULL, NULL, &timeout) == -1) {
+    //         perror("select()");
+    //         exit(84);
+    //     }
+    //     if (FD_ISSET(socket_client, &readfs)) {
+    //         recv(socket_client, &msg, 50, 0);
+    //         printf("Server: %s\n", msg);
+    //     }
+    // }
+
     close(socket_client);
     return (0);
 }
