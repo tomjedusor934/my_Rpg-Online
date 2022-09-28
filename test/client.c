@@ -20,10 +20,11 @@
 //     int id;
 // } User_t;
 
-
 int main(void)
 {
     int sock = socket(AF_INET, SOCK_STREAM, 0);
+    generic_t *gen = malloc(sizeof(generic_t));
+    gen->test = malloc(sizeof(test_t));
     struct sockaddr_in addclient;
     addclient.sin_addr.s_addr = inet_addr("127.0.0.1");
     addclient.sin_family = AF_INET;
@@ -44,8 +45,11 @@ int main(void)
     info_t info_player;
     if (recv(sock, &info_player, sizeof(info_t), 0) > 0) {
         printf("connexion reussi\n");
-        printf("posx: %s\n", info_player.user_info->age);
+        //printf("posx: %s\n", info_player.user_info->age);
     }
+    printf("Message received\n");
+    recv(sock, gen, sizeof(generic_t), 0);
+    printf("patate\n%d\n%d\n", gen->x, gen->test->i);
     printf("Message received\n");
 
     close(sock);

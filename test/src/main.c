@@ -51,8 +51,26 @@
 //     int id;
 // } user_t;
 
+void add_node(generic_t *gen)
+{
+    for (int i = 0; i < 10; ++i) {
+    test_t *node = malloc(sizeof(test_t));
+    printf("adress: %p\n", node);
+    node->i = i;
+    node->next = gen->test;
+    gen->test[i] = *node;
+    }
+}
+
 int server(void)
 {
+    generic_t *gen = malloc(sizeof(generic_t));
+    add_node(gen);
+    for (int i = 0; i < 10; ++i) {
+        printf("%d | %p\n", gen->test[i].i, gen->test[i].next);
+    }
+    exit (0);
+    gen->x = 0;
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in addserver;
     addserver.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -87,12 +105,13 @@ int server(void)
                 .life = 100,
                 .name = "test",
                 .pseudo = "patate",
-                .user_info = user
+                .user_info = &user
             };
             send(client_sock, &info_player, sizeof(info_t), 0);
         } else {
             printf("User is not valid\n");
         }
+        send(client_sock, gen, sizeof(generic_t), 0);
     }
     close(client_sock);
     close(sock);
