@@ -72,4 +72,15 @@ typedef struct info_s {
     user_t *user_info;
 } info_t;
 
+typedef struct test_s {
+    int i;
+    struct test_s *next;
+} test_t;
+typedef struct generic {
+    int x;
+    test_t test[10];
+} generic_t;
+
+void add_node(generic_t *gen);
+
 #endif /* !SOCKET_H_ */
