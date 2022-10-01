@@ -2,6 +2,9 @@
 *.env
 rpg_client
 rpg_server
+./test/a.out
+./test/socket_server
+./test/*
 
 # Prerequisites
 *.d
