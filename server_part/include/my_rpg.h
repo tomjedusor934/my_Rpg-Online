@@ -120,6 +120,7 @@ char *my_strcat(char const *src1, char const *src);
 char **word_array(char const *str, char *del);
 void free_tab(char **tab);
 long my_cti(char *str);
+int different_of_delim(char c, char * del);
 
 
 //chargement

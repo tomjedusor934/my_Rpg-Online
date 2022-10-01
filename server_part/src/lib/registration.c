@@ -7,12 +7,11 @@
 
 #include "../../include/my_rpg.h"
 
-char *find_info(char **info_user, char *info)
-{
-    char *buffer = NULL;
-    return (buffer);
-}
-
+/*
+ * desc
+ * @param
+ * @return
+*/
 int user_correspond(char const *name, char const *password,char const *dir_name)
 {
     int x = 0;

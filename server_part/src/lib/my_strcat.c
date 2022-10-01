@@ -7,6 +7,11 @@
 
 #include "../../include/my_rpg.h"
 
+/*
+ * desc
+ * @param
+ * @return
+*/
 char *my_strcat(char const *src1, char const *src)
 {
     int x = strlen(src);

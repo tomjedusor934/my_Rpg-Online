@@ -7,6 +7,11 @@
 
 #include "../../include/my_rpg.h"
 
+/*
+ * desc
+ * @param
+ * @return
+*/
 int my_atoi(char const *str, int pos)
 {
     char *tmp = (char *) str;

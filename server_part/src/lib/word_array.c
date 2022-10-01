@@ -7,7 +7,12 @@
 
 #include "../../include/my_rpg.h"
 
-static int different_of_delim(char c, char * del)
+/*
+ * desc
+ * @param
+ * @return
+*/
+int different_of_delim(char c, char * del)
 {
     if (c == '\0')
         return (0);
@@ -17,6 +22,11 @@ static int different_of_delim(char c, char * del)
     return (1);
 }
 
+/*
+ * desc
+ * @param
+ * @return
+*/
 static int count_line(char const *str, char *del)
 {
     int count = 0;
@@ -33,6 +43,11 @@ static int count_line(char const *str, char *del)
     return (count);
 }
 
+/*
+ * desc
+ * @param
+ * @return
+*/
 static int size_until_delim(char const *str, char * del, int pos)
 {
     int size = 0;
@@ -49,6 +64,11 @@ static int size_until_delim(char const *str, char * del, int pos)
     return (size);
 }
 
+/*
+ * desc
+ * @param
+ * @return
+*/
 void free_tab(char **tab)
 {
     for (int i = 0; tab[i]; ++i)
@@ -56,6 +76,11 @@ void free_tab(char **tab)
     free(tab);
 }
 
+/*
+ * desc
+ * @param
+ * @return
+*/
 char **word_array(char const *str, char *del)
 {
     int line = count_line(str, del);

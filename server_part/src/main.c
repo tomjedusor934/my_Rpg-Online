@@ -11,6 +11,11 @@ mtx_t mutex;
 unsigned long th_id = 0;
 general_t struct_server;
 
+/*
+ * desc
+ * @param
+ * @return
+*/
 void add_node(thread_t thread, int client_nb)
 {
     struct_server.thread[client_nb].id = thread.id;
@@ -29,11 +34,21 @@ void add_node(thread_t thread, int client_nb)
     //     printf("null patate\n");
 }
 
+/*
+ * desc
+ * @param
+ * @return
+*/
 user_t create_user(user_t user)
 {
     return (user);
 }
 
+/*
+ * desc
+ * @param
+ * @return
+*/
 user_t connection_is_accepted(user_t user, int connect_method)
 {
     if (connect_method == 1) {
@@ -43,6 +58,12 @@ user_t connection_is_accepted(user_t user, int connect_method)
     }
     return user;
 }
+
+/*
+ * desc
+ * @param
+ * @return
+*/
 void *thread(void *arg)
 {
     int socket = *(int *)arg;

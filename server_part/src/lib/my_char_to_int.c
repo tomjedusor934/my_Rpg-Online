@@ -7,6 +7,11 @@
 
 #include "../../include/my_rpg.h"
 
+/*
+ * desc
+ * @param
+ * @return
+*/
 long my_cti(char *str)
 {
     long nb = 0;
@@ -19,7 +24,6 @@ long my_cti(char *str)
             nb *= ret;
             nb += (str[x] - 48);
         }
-
     }
     return (nb * neg);
 }
