@@ -118,7 +118,8 @@ enum scene {
 int my_atoi(char const *str, int pos);
 char *my_strcat(char const *src1, char const *src);
 char **word_array(char const *str, char *del);
-int my_cti(char *str);
+void free_tab(char **tab);
+long my_cti(char *str);
 
 
 //chargement
