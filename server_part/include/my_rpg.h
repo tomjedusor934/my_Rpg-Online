@@ -53,7 +53,7 @@
 //define const
 #define ADDRESS "localhost"
 #define PORT 4242
-#define MAX_CLIENT 10
+#define MAX_CLIENT 2
 #define MAX_BUFFER 30
 #define MEDIUM_BUFFER 15
 #define SMALL_BUFFER 5

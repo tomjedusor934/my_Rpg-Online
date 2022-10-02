@@ -73,38 +73,36 @@ void *thread(void *arg)
 
     send(socket, msg, strlen(msg) + 1, 0);
     recv(socket, &connect_method, sizeof(int), 0);
+    printf("connect_method = %d\n", connect_method);
     connect_method = 1;
     if (connect_method == 1) {
         send(socket, "tapez votre nom", strlen("tapez votre nom") + 1, 0);
         recv(socket, user.name, sizeof(user.name), 0);
+        printf("user.name = %s\n", user.name);
         send(socket, "tapez votre mot de passe", strlen("tapez votre mot de passe") + 1, 0);
         recv(socket, user.password, sizeof(user.password), 0);
+        printf("user.password = %s\n", user.password);
         user = connection_is_accepted(user, connect_method);
         if (user.connection_approuved == true) {
 
-            thread_t thread = {
-                .id = th_id,
+            thread_t new_thread = {
+                .id = th_id + 1,
                 .socket = socket,
                 .user[0] = user
             };
             mtx_lock(&mutex);
-            add_node(thread, th_id);
+            add_node(new_thread, th_id);
             th_id += 1;
             mtx_unlock(&mutex);
 
-            printf( "user name : %s and id: %d\n" , user.name, user.id);
+            printf( "user name : %s and id: %d\n" , struct_server.thread[new_thread.id].user[0].name, struct_server.thread[new_thread.id].user[0].id);
 
-            // while (true) {
-            //     usleep(100000);
-            //     thread_t *tmp = struct_server.thread;
-            //     printf("socket nb%d | user:%s\n", tmp->socket, user.name);
+            send(socket, &struct_server, sizeof(struct_server), 0);
 
-            //     while (tmp) {
-            //         printf("id: %d, socket: %d, name: %s\n", tmp->id, tmp->socket, tmp->user->name);
-            //         tmp = tmp->next;
-            //     }
-            //     printf("fin de la liste\n");
-            // }
+            while (1) {
+                //utiliser select avec un timeout
+
+            }
         }
     }
     close(socket);
