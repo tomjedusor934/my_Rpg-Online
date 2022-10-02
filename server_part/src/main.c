@@ -85,13 +85,14 @@ void *thread(void *arg)
         user = connection_is_accepted(user, connect_method);
         if (user.connection_approuved == true) {
 
+            mtx_lock(&mutex);
             thread_t new_thread = {
                 .id = th_id + 1,
                 .socket = socket,
                 .user[0] = user
             };
-            mtx_lock(&mutex);
             add_node(new_thread, th_id);
+            send(socket, &th_id, sizeof(int), 0);
             th_id += 1;
             mtx_unlock(&mutex);
 

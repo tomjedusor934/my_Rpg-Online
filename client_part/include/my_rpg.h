@@ -98,6 +98,17 @@ typedef struct general_s {
     pthread_t thread_array[MAX_CLIENT];
 } general_t;
 
+typedef struct game_s
+{
+    sfRenderWindow *window;
+    sfView *cam;
+    sfVideoMode mode;
+    sfEvent event;
+
+    int thread_id;
+    int socket_client;
+} game_t;
+
 //define enum
 enum scene {
     MENU = 0,
@@ -110,5 +121,10 @@ enum scene {
 };
 
 //define function
+
+void setup(game_t *game);
+void load_menu(game_t *game);
+void load_game(game_t *game);
+void load_fight(game_t *game);
 
 #endif/* !MY_RPG_H_ */
