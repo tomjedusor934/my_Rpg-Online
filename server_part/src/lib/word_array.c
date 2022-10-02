@@ -29,7 +29,7 @@ int different_of_delim(char c, char * del)
 */
 static int count_line(char const *str, char *del)
 {
-    int count = 0;
+    int count = 1;
 
     for (int i = 0; str[i]; ++i) {
         for (int x = 0; del[x]; ++x) {
@@ -39,7 +39,6 @@ static int count_line(char const *str, char *del)
             }
         }
     }
-
     return (count);
 }
 
@@ -83,7 +82,9 @@ void free_tab(char **tab)
 */
 char **word_array(char const *str, char *del)
 {
+    printf("word array: str: %s| del: %s\n", str, del);
     int line = count_line(str, del);
+    printf("line: %d\n", line);
     char **array = malloc(sizeof(char *) * (line + 1));
     int pos = 0;
     int sizeof_string = 0;

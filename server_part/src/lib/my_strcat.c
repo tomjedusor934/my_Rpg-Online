@@ -14,8 +14,9 @@
 */
 char *my_strcat(char const *src1, char const *src)
 {
-    int x = strlen(src);
-    int y = strlen(src1);
+    printf("entre\n");
+    int x = strlen(src1);
+    int y = strlen(src);
     char *dest = malloc(sizeof(char) * (x + y + 1));
 
     for (int i = 0; i != x; ++i)
@@ -23,5 +24,6 @@ char *my_strcat(char const *src1, char const *src)
     for (int i = 0; i != y; ++i)
         dest[x + i] = src[i];
     dest[x + y] = '\0';
+    printf("fini: dest: %s\n", dest);
     return (dest);
 }
