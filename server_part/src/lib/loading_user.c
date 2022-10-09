@@ -128,7 +128,7 @@ user_t find_user(char const *name , char *password)
 {
     printf("name : %s | password: %s\n", name, password);
     //exit(0);
-    user_t user;
+    user_t user = {0};
     FILE *file;
     DIR *directory = NULL;
     struct dirent *dir;
@@ -136,6 +136,7 @@ user_t find_user(char const *name , char *password)
     char *user_file = NULL;
     struct stat s;
     int stat_return = 0;
+    int find = 0;
 
     directory = opendir("server_part/src/users");
     if (!(dir = readdir(directory)))
@@ -160,10 +161,13 @@ user_t find_user(char const *name , char *password)
             user_file[s.st_size] = '\0';
             printf("user_file: %s\n", user_file);
             user = charge_user(user, user_file);
+            find = 1;
             break;
         }
         dir = readdir(directory);
     }
+    if (find == 0)
+        user.connection_approuved = false;
     closedir(directory);
     return (user);
 }

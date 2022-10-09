@@ -29,6 +29,7 @@
     #include <netdb.h> /* gethostbyname */
     #include <sys/wait.h>
     #include <sys/stat.h>
+    #include <sys/select.h>
 
     //include for linux thread
     #include <pthread.h>
@@ -80,10 +81,7 @@ typedef struct thread_s {
     bool is_connect;
     int id;
     int socket;
-    // struct sockaddr_in client;
-    // socklen_t size;
     user_t user[1];
-    //struct thread_s *next;
 } thread_t;
 
 typedef struct game_oject_s {
@@ -94,6 +92,7 @@ typedef struct skin_user_s {
 }skin_user_t;
 
 typedef struct general_s {
+    int your_thread;
     thread_t thread[MAX_CLIENT];
     pthread_t thread_array[MAX_CLIENT];
 } general_t;

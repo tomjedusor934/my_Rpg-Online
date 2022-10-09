@@ -18,20 +18,10 @@ general_t struct_server;
 */
 void add_node(thread_t thread, int client_nb)
 {
+    struct_server.your_thread = thread.id;
     struct_server.thread[client_nb].id = thread.id;
     struct_server.thread[client_nb].socket = thread.socket;
     struct_server.thread[client_nb].user[0] = thread.user[0];
-
-    // if (struct_server.thread == NULL)
-    //     printf("null patate\n");
-    // thread_t node = malloc(sizeof(thread_t));
-    // node->id = thread.id;
-    // node->user = thread.user;
-    // node->socket = thread.socket;
-    // node->next = struct_server.thread;
-    // struct_server.thread = node;
-    // if (struct_server.thread->next == NULL)
-    //     printf("null patate\n");
 }
 
 /*
@@ -68,6 +58,7 @@ void *thread(void *arg)
 {
     int socket = *(int *)arg;
     int connect_method = 0;
+    int my_thread_id = 0;
     user_t user;
     char msg[] =  "tapez 1 pour vous connecter 2 pour vous enregistrer";
 
@@ -83,6 +74,7 @@ void *thread(void *arg)
         recv(socket, user.password, sizeof(user.password), 0);
         printf("user.password = %s\n", user.password);
         user = connection_is_accepted(user, connect_method);
+        printf("connexion : %d\n", user.connection_approuved);
         if (user.connection_approuved == true) {
 
             mtx_lock(&mutex);
@@ -93,6 +85,7 @@ void *thread(void *arg)
             };
             add_node(new_thread, th_id);
             send(socket, &th_id, sizeof(int), 0);
+            my_thread_id = th_id;
             th_id += 1;
             mtx_unlock(&mutex);
 
@@ -100,8 +93,22 @@ void *thread(void *arg)
 
             send(socket, &struct_server, sizeof(struct_server), 0);
 
+            fd_set readfs;
+            struct timeval timeout;
+            timeout.tv_sec = 0;
+            timeout.tv_usec = 10000;
+
+            FD_ZERO(&readfs);
+            FD_SET(socket, &readfs);
             while (1) {
+                if (select(socket, &readfs, NULL, NULL, &timeout) > 0)
+                    mtx_lock(&mutex);
+                    //thread_t copy_thread = struct_server.thread[my_thread_id];
+                    recv(socket, &struct_server.thread[my_thread_id], sizeof(thread_t), 0);
+                    mtx_unlock(&mutex);
+
                 //utiliser select avec un timeout
+
 
             }
         }
@@ -114,6 +121,7 @@ void *thread(void *arg)
 int main(void)
 {
     mtx_init(&mutex, mtx_plain);
+    memset(&struct_server, 0, sizeof(struct_server));
     //struct_server.thread = NULL;
     int socket_server = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in server;
