@@ -10,14 +10,40 @@
 general_t struct_client;
 mtx_t mutex;
 
+/*
+ * desc
+ * @param
+ * @return
+ */
 void *update_info(void *arg)
 {
+    fd_set readfs;
+    struct timeval timeout;
+    game_t *game = (game_t *) arg;
+    int return_select = 0;
+
+    FD_ZERO(&readfs);
+    FD_SET(game->socket_client, &readfs);
     while(1) {
         //prepare the select
+        timeout.tv_sec = 0;
+        timeout.tv_usec = 100000;
+
+        return_select = select(game->socket_client, &readfs, NULL, NULL, &timeout);
+        printf("return select : %d\n", return_select);
+        if (return_select != 0)
+            mtx_lock(&mutex);
+            recv(game->socket_client, &struct_client, sizeof(struct_client), 0);
+            mtx_unlock(&mutex);
     }
     pthread_exit(NULL);
 }
 
+/*
+ * desc
+ * @param
+ * @return
+ */
 void *init_session(game_t *game, int socket_client, int connect_method)
 {
     char msg[100];
@@ -35,8 +61,9 @@ void *init_session(game_t *game, int socket_client, int connect_method)
     scanf("%s", user.password);
     send(socket_client, &user.password, strlen(user.password) + 1, 0);
     printf("en attente de la reponse dus serveur\n");
-    recv(socket_client, &game->thread_id, sizeof(int), 0);
+    //recv(socket_client, &game->my_thread, sizeof(int), 0);
     recv(socket_client, &struct_client, sizeof(struct_client), 0);
+    // if (&struct_client)
 }
 
 int main(void)
@@ -77,5 +104,6 @@ int main(void)
         sfRenderWindow_display(game->window);
     }
     close(socket_client);
+    mtx_destroy(&mutex);
     return (0);
 }
