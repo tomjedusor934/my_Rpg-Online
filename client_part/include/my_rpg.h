@@ -29,6 +29,7 @@
     #include <netdb.h> /* gethostbyname */
     #include <sys/wait.h>
     #include <sys/stat.h>
+    #include <sys/select.h>
 
     //include for linux thread
     #include <pthread.h>
@@ -105,7 +106,7 @@ typedef struct game_s
     sfVideoMode mode;
     sfEvent event;
 
-    int thread_id;
+    int my_thread;
     int socket_client;
 } game_t;
 
