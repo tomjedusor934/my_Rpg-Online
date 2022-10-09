@@ -7,20 +7,122 @@
 
 #include "../include/my_rpg.h"
 
-void *test(void *arg)
+mtx_t mutex;
+unsigned long th_id = 0;
+general_t struct_server;
+
+/*
+ * desc
+ * @param
+ * @return
+*/
+void add_node(thread_t thread, int client_nb)
+{
+    struct_server.your_thread = thread.id;
+    struct_server.thread[client_nb].id = thread.id;
+    struct_server.thread[client_nb].socket = thread.socket;
+    struct_server.thread[client_nb].user[0] = thread.user[0];
+}
+
+/*
+ * desc
+ * @param
+ * @return
+*/
+user_t create_user(user_t user)
+{
+    return (user);
+}
+
+/*
+ * desc
+ * @param
+ * @return
+*/
+user_t connection_is_accepted(user_t user, int connect_method)
+{
+    if (connect_method == 1) {
+        user = find_user(user.name, user.password);
+    } else if (connect_method == 2) {
+        user = create_user(user);
+    }
+    return user;
+}
+
+/*
+ * desc
+ * @param
+ * @return
+*/
+void *thread(void *arg)
 {
     int socket = *(int *)arg;
+    int connect_method = 0;
+    int my_thread_id = 0;
     user_t user;
-    char msg[] =  "bouffe moi les couilles et donne moi ton blaze" ;
+    char msg[] =  "tapez 1 pour vous connecter 2 pour vous enregistrer";
+
     send(socket, msg, strlen(msg) + 1, 0);
-    recv(socket, &user, sizeof(user), 0);
-    printf( "user name : %s and id: %d\n" , user.name, user.id);
+    recv(socket, &connect_method, sizeof(int), 0);
+    printf("connect_method = %d\n", connect_method);
+    connect_method = 1;
+    if (connect_method == 1) {
+        send(socket, "tapez votre nom", strlen("tapez votre nom") + 1, 0);
+        recv(socket, user.name, sizeof(user.name), 0);
+        printf("user.name = %s\n", user.name);
+        send(socket, "tapez votre mot de passe", strlen("tapez votre mot de passe") + 1, 0);
+        recv(socket, user.password, sizeof(user.password), 0);
+        printf("user.password = %s\n", user.password);
+        user = connection_is_accepted(user, connect_method);
+        printf("connexion : %d\n", user.connection_approuved);
+        if (user.connection_approuved == true) {
+
+            mtx_lock(&mutex);
+            thread_t new_thread = {
+                .id = th_id + 1,
+                .socket = socket,
+                .user[0] = user
+            };
+            add_node(new_thread, th_id);
+            send(socket, &th_id, sizeof(int), 0);
+            my_thread_id = th_id;
+            th_id += 1;
+            mtx_unlock(&mutex);
+
+            printf( "user name : %s and id: %d\n" , struct_server.thread[new_thread.id].user[0].name, struct_server.thread[new_thread.id].user[0].id);
+
+            send(socket, &struct_server, sizeof(struct_server), 0);
+
+            fd_set readfs;
+            struct timeval timeout;
+            timeout.tv_sec = 0;
+            timeout.tv_usec = 10000;
+
+            FD_ZERO(&readfs);
+            FD_SET(socket, &readfs);
+            while (1) {
+                if (select(socket, &readfs, NULL, NULL, &timeout) > 0)
+                    mtx_lock(&mutex);
+                    //thread_t copy_thread = struct_server.thread[my_thread_id];
+                    recv(socket, &struct_server.thread[my_thread_id], sizeof(thread_t), 0);
+                    mtx_unlock(&mutex);
+
+                //utiliser select avec un timeout
+
+
+            }
+        }
+    }
     close(socket);
     free(arg);
     pthread_exit(NULL);
 }
+
 int main(void)
 {
+    mtx_init(&mutex, mtx_plain);
+    memset(&struct_server, 0, sizeof(struct_server));
+    //struct_server.thread = NULL;
     int socket_server = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in server;
     server.sin_addr.s_addr = INADDR_ANY;
@@ -33,9 +135,7 @@ int main(void)
     listen(socket_server, 5);
     printf("listen on: %d\n", socket_server);
 
-    pthread_t thread_array[2];
-
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < MAX_CLIENT; ++i) {
         struct sockaddr_in socket_client;
         socklen_t size = sizeof(socket_client);
         int client = accept(socket_server, (struct sockaddr *)&socket_client, &size);
@@ -43,11 +143,12 @@ int main(void)
 
         int *arg = malloc(sizeof(int));
         *arg = client;
-        pthread_create(&thread_array[i], NULL, test, arg);
+        pthread_create(&struct_server.thread_array[i], NULL, thread, arg);
     }
     for (int i = 0; i < 2; ++i) {
-        pthread_join(thread_array[i], NULL);
+        pthread_join(struct_server.thread_array[i], NULL);
     }
+    mtx_destroy( &mutex );
     close(socket_server);
     return (0);
 }

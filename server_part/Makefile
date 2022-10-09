@@ -5,7 +5,9 @@
 ## Makefile
 ##
 
-SRC = $(wildcard src/*.c)
+SRC = 	$(wildcard src/*.c)	\
+		$(wildcard src/*/*.c)	\
+		$(wildcard src/*/*/*.c)
 
 OBJ = $(SRC:.c=.o)
 
@@ -18,7 +20,7 @@ NAME = rpg_server
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc $(OBJ) -o $(NAME) $(C_FLAGS) $(CSFML_FLAGS)
+	gcc $(OBJ) -o $(NAME) -iquote include/ $(C_FLAGS) $(CSFML_FLAGS)
 	mv $(NAME) ../
 
 clean:

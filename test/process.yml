@@ -1,0 +1,33 @@
+process:
+      - project:
+        name: my_rpg_online
+        path: /home/my_project/my_rpg_reseau
+        type: game
+        version: 1.0.0
+
+      - server:
+        step:
+          - 1: "etablish connection"
+          - 2: "waiting for client connection or register"
+          - 3: "asking for user name & password"
+          - "if its connection":
+                            - "check if user exist"
+                            - "check if password is correct"
+                            - "insert good information in structure"
+                            - "send to client good information"
+          - "if its register":
+                            - "check if user name exist":
+                                                      - "if yes":
+                                                                - "find last id and add 1 to create a difference"
+                            - "check if password is correct":
+                                                      - "if yes":
+                                                                - "insert good information in structure"
+                                                                - "send to client good information"
+          - 4: "waiting for client action"
+      - client:
+        step:
+          - 1: "etablish connection"
+          - 2: "waiting asking for user name & password difference if choose connexion and registration"
+          - 3: "waiting for server response"
+          - 4: "waiting for client action"
+          - 5: "waiting for server response"
